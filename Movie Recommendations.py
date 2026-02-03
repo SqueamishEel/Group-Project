@@ -1,7 +1,7 @@
 #Import Components
 import pandas as pd
 
-#Read dataset Fils
+#Read dataset files
 FullDataset = pd.read_csv("C:/Users/25719211/OneDrive - Edge Hill University/Pro - Practice II/movies_dataset.csv")
 MovieDataset = pd.read_csv("C:/Users/25719211/OneDrive - Edge Hill University/Pro - Practice II/movies_dataset.csv")
 
@@ -15,6 +15,6 @@ MovieDataset.pop("NumVotesIMDb")
 MovieDataset.pop("ReleaseYear")
 MovieDataset.pop("NumVotesRT")
 
-#Output Datasets
+#Output datasets
 FullDataset
 MovieDataset
