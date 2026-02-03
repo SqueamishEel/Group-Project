@@ -22,3 +22,4 @@ MovieDataset['IMDbRating'].fillna(MovieDataset['IMDbRating'].median(), inplace =
 
 #Output Datasets
 FullDataset
+MovieDataset
