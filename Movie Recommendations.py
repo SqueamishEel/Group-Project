@@ -3,8 +3,8 @@ import pandas as pd
 import numpy as np
 
 #Read dataset Fils
-FullDataset = pd.read_csv("C:/Users/25719211/OneDrive - Edge Hill University/Pro - Practice II/movies.csv")
-MovieDataset = pd.read_csv("C:/Users/25719211/OneDrive - Edge Hill University/Pro - Practice II/movies.csv")
+FullDataset = pd.read_csv("C:/Users/26159295/Downloads/movies (1).csv")
+MovieDataset = pd.read_csv("C:/Users/26159295/Downloads/movies (1).csv")
 
 #Remove unecessary columns
 MovieDataset.pop("index")
@@ -29,6 +29,8 @@ MovieDataset.pop("crew")
 #Removing Missing Values from dataset
 MovieDataset['runtime'] = MovieDataset['runtime'].replace(0, np.nan)
 MovieDataset['runtime'].fillna(MovieDataset['runtime'].median(), inplace = True)
+
+MovieDataset['tags'] = MovieDataset['genres'] + '' + MovieDataset['original_language'] + '' + MovieDataset['original_title'] + '' + MovieDataset['release_date'] + ''  + MovieDataset['director'] + ''
 
 
 #Output Datasets
