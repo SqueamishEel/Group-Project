@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 
-#Read dataset Files
+#Read dataset Fils
 FullDataset = pd.read_csv("C:/Users/25719211/OneDrive - Edge Hill University/Pro - Practice II/movies.csv")
 MovieDataset = pd.read_csv("C:/Users/25719211/OneDrive - Edge Hill University/Pro - Practice II/movies.csv")
 
@@ -12,7 +12,7 @@ MovieDataset.pop("budget")
 MovieDataset.pop("homepage")
 MovieDataset.pop("id")
 MovieDataset.pop("keywords")
-MovieDataset.pop("original_language")
+MovieDataset.pop("spoken_language")
 MovieDataset.pop("overview")
 MovieDataset.pop("popularity")
 MovieDataset.pop("production_companies")
@@ -25,9 +25,11 @@ MovieDataset.pop("vote_count")
 MovieDataset.pop("cast")
 MovieDataset.pop("crew")
 
-#Replacing Missing Values with NaN
+
+#Removing Missing Values from dataset
 MovieDataset['runtime'] = MovieDataset['runtime'].replace(0, np.nan)
 MovieDataset['runtime'].fillna(MovieDataset['runtime'].median(), inplace = True)
+
 
 #Output Datasets
 FullDataset
