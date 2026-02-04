@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 
-#Read dataset Fils
+#Read dataset Files
 FullDataset = pd.read_csv("C:/Users/25719211/OneDrive - Edge Hill University/Pro - Practice II/movies.csv")
 MovieDataset = pd.read_csv("C:/Users/25719211/OneDrive - Edge Hill University/Pro - Practice II/movies.csv")
 
