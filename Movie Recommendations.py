@@ -13,7 +13,7 @@ MovieDataset.pop("Global_BoxOfficeUSD")
 MovieDataset.pop("Opening_Day_SalesUSD")
 MovieDataset.pop("One_Week_SalesUSD")
 MovieDataset.pop("NumVotesIMDb")
-MovieDataset.pop("ReleaseYear")
+MovieDataset.pop("ReleaseDate")
 MovieDataset.pop("NumVotesRT")
 
 #Replacing Missing Values with NaN
