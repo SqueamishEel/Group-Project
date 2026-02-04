@@ -3,22 +3,31 @@ import pandas as pd
 import numpy as np
 
 #Read dataset Fils
-FullDataset = pd.read_csv("C:/Users/25719211/OneDrive - Edge Hill University/Pro - Practice II/movies_dataset.csv")
-MovieDataset = pd.read_csv("C:/Users/25719211/OneDrive - Edge Hill University/Pro - Practice II/movies_dataset.csv")
+FullDataset = pd.read_csv("C:/Users/25719211/OneDrive - Edge Hill University/Pro - Practice II/movies.csv")
+MovieDataset = pd.read_csv("C:/Users/25719211/OneDrive - Edge Hill University/Pro - Practice II/movies.csv")
 
 #Remove unecessary columns
-MovieDataset.pop("BudgetUSD")
-MovieDataset.pop("US_BoxOfficeUSD")
-MovieDataset.pop("Global_BoxOfficeUSD")
-MovieDataset.pop("Opening_Day_SalesUSD")
-MovieDataset.pop("One_Week_SalesUSD")
-MovieDataset.pop("NumVotesIMDb")
-MovieDataset.pop("ReleaseDate")
-MovieDataset.pop("NumVotesRT")
+MovieDataset.pop("index")
+MovieDataset.pop("budget")
+MovieDataset.pop("homepage")
+MovieDataset.pop("id")
+MovieDataset.pop("keywords")
+MovieDataset.pop("original_language")
+MovieDataset.pop("overview")
+MovieDataset.pop("popularity")
+MovieDataset.pop("production_companies")
+MovieDataset.pop("production_countries")
+MovieDataset.pop("revenue")
+MovieDataset.pop("status")
+MovieDataset.pop("tagline")
+MovieDataset.pop("title")
+MovieDataset.pop("vote_count")
+MovieDataset.pop("cast")
+MovieDataset.pop("crew")
 
 #Replacing Missing Values with NaN
-MovieDataset['IMDbRating'] = MovieDataset['IMDbRating'].replace(0, np.nan)
-MovieDataset['IMDbRating'].fillna(MovieDataset['IMDbRating'].median(), inplace = True)
+MovieDataset['runtime'] = MovieDataset['runtime'].replace(0, np.nan)
+MovieDataset['runtime'].fillna(MovieDataset['runtime'].median(), inplace = True)
 
 #Output Datasets
 FullDataset
