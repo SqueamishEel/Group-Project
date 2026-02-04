@@ -25,6 +25,7 @@ titlelabel = tk.Label(window,
                 )
 titlelabel.pack(pady=20)
 
+#Genre Label
 label_genre = Label(window, text="Genre",
                     anchor="w",
                     font=("Arial", 16, "bold"),       
@@ -32,6 +33,7 @@ label_genre = Label(window, text="Genre",
                     fg="black")
 label_genre.pack(pady=10, padx=10, anchor="w")
 
+#Actor Label
 label_Actor = Label(window, text="Actor",
                     anchor="w",
                     font=("Arial", 16, "bold"),       
@@ -39,6 +41,7 @@ label_Actor = Label(window, text="Actor",
                     fg="black")
 label_Actor.pack(pady=10, padx=10, anchor="w")
 
+#Director Label
 label_Director = Label(window, text="Director",
                        anchor="w",
                        font=("Arial", 16, "bold"),       
@@ -46,10 +49,12 @@ label_Director = Label(window, text="Director",
                        fg="black")
 label_Director.pack(pady=10, padx=10, anchor="w")
 
+
+#Search Button
 def button_clicked():
     print("Button clicked!")
 
-# Creating a button with specified options
+
 button = tk.Button(window, 
                    text="Search", 
                    command=button_clicked,
