@@ -26,20 +26,12 @@ titlelabel = tk.Label(window,
 titlelabel.pack(pady=20)
 
 #Genre Label
-label_genre = Label(window, text="Genre",
+label_genre = Label(window, text="Genre *",
                     anchor="w",
                     font=("Arial", 16, "bold"),       
                     bg="lightblue",   
                     fg="black")
 label_genre.pack(pady=10, padx=10, anchor="w")
-
-#Actor Label
-label_Actor = Label(window, text="Actor",
-                    anchor="w",
-                    font=("Arial", 16, "bold"),       
-                    bg="lightblue",   
-                    fg="black")
-label_Actor.pack(pady=10, padx=10, anchor="w")
 
 #Director Label
 label_Director = Label(window, text="Director",
@@ -49,6 +41,29 @@ label_Director = Label(window, text="Director",
                        fg="black")
 label_Director.pack(pady=10, padx=10, anchor="w")
 
+#Year Label
+label_Year = Label(window, text="Release Year",
+                    anchor="w",
+                    font=("Arial", 16, "bold"),       
+                    bg="lightblue",   
+                    fg="black")
+label_Year.pack(pady=10, padx=10, anchor="w")
+
+#Language Label
+label_Language = Label(window, text="Language",
+                    anchor="w",
+                    font=("Arial", 16, "bold"),       
+                    bg="lightblue",   
+                    fg="black")
+label_Language.pack(pady=10, padx=10, anchor="w")
+
+#Required Label
+label_required = Label(window, text="* Indicates a required field",
+                    anchor="w",
+                    font=("Arial", 8, "bold"),       
+                    bg="lightblue",   
+                    fg="black")
+label_required.pack(pady=5, padx=5, anchor="w")
 
 #Search Button
 def button_clicked():
@@ -78,5 +93,7 @@ button = tk.Button(window,
                    wraplength=100)
 
 button.pack(padx=20, pady=20)
+
+window.resizable(0,0)
 
 window.mainloop()
