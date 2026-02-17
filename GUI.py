@@ -115,7 +115,7 @@ def Submit_Form():
             recommendation_window.resizable(0, 0)
 
             # left arrow button
-            left_arrow_img = tk.PhotoImage(master=recommendation_window, file="C:/Users/fitz_/Downloads/Group-Project_Images_Left Arrow.png at main · SqueamishEel_Group-Project_files\Left Arrow.png")
+            left_arrow_img = tk.PhotoImage(master=recommendation_window, file="Images/Left Arrow.png")
             left_arrow = tk.Button(recommendation_window,
                                    image=left_arrow_img,
                                    activebackground="lightblue",
@@ -131,7 +131,7 @@ def Submit_Form():
             recommendation_mid_section.grid(row=0, column=1)
 
             # right arrow button
-            right_arrow_img = tk.PhotoImage(master=recommendation_window, file="C:/Users/fitz_/Downloads/Group-Project_Images_Right Arrow.png at main · SqueamishEel_Group-Project_files\Right Arrow.png")
+            right_arrow_img = tk.PhotoImage(master=recommendation_window, file="Images/Right Arrow.png")
             right_arrow = tk.Button(recommendation_window,
                                     image=right_arrow_img,
                                     activebackground="lightblue",
