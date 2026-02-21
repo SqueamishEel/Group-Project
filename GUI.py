@@ -110,18 +110,38 @@ def Submit_Form():
             global recommended_movie_runtimes
             global recommended_movie_descriptions
             global recommended_movie_number
-            recommended_movie_titles = ["Avatar"]
-            recommended_movie_genres = ["Action Adventure"]
-            recommended_movie_directors = ["James Cameron"]
-            recommended_movie_release_years = ["2009"]
-            recommended_movie_languages = ["English"]
-            recommended_movie_ratings = ["7.2"]
-            recommended_movie_runtimes = ["162 Minutes"]
-            recommended_movie_descriptions = ["In the 22nd century, a paraplegic Marine is dispatched to the moon Pandora on a unique mission, but becomes torn between following orders and protecting an alien civilization."]
+            global recommended_movie_count
+            recommended_movie_titles = ["Avatar", "Pirates of the Caribbean: At World's End"]
+            recommended_movie_genres = ["Action Adventure", "Adventure Fantasy Action"]
+            recommended_movie_directors = ["James Cameron", "Gore Verbinski"]
+            recommended_movie_release_years = ["2009", "2008"]
+            recommended_movie_languages = ["English", "English"]
+            recommended_movie_ratings = ["7.2", "6.9"]
+            recommended_movie_runtimes = ["162 Minutes", "169 Minutes"]
+            recommended_movie_descriptions = ["In the 22nd century, a paraplegic Marine is dispatched to the moon Pandora on a unique mission, but becomes torn between following orders and protecting an alien civilization.",
+                                              "Captain Barbossa, long believed to be dead, has come back to life and is headed to the edge of the Earth with Will Turner and Elizabeth Swann. But nothing is quite as it seems."]
             recommended_movie_number = 1
+            recommended_movie_count = 2
             
             def Load_Recommendation():
-                print(f"Loading the recommendation with number {recommended_movie_number}")
+                global recommended_movie_number
+                recommended_movie_index = recommended_movie_number-1
+                recommended_movie_title_lbl.configure(text=f"{recommended_movie_titles[recommended_movie_index]}")
+                recommended_movie_genre_entry.delete(0, "end")
+                recommended_movie_genre_entry.insert(0, f"{recommended_movie_genres[recommended_movie_index]}")
+                recommended_movie_director_entry.delete(0, "end")
+                recommended_movie_director_entry.insert(0, f"{recommended_movie_directors[recommended_movie_index]}")
+                recommended_movie_release_year_entry.delete(0, "end")
+                recommended_movie_release_year_entry.insert(0, f"{recommended_movie_release_years[recommended_movie_index]}")
+                recommended_movie_language_entry.delete(0, "end")
+                recommended_movie_language_entry.insert(0, f"{recommended_movie_languages[recommended_movie_index]}")
+                recommended_movie_rating_entry.delete(0, "end")
+                recommended_movie_rating_entry.insert(0, f"{recommended_movie_ratings[recommended_movie_index]}")
+                recommended_movie_runtime_entry.delete(0, "end")
+                recommended_movie_runtime_entry.insert(0, f"{recommended_movie_runtimes[recommended_movie_index]}")
+                recommended_movie_description_tb.delete("1.0", str(len(recommended_movie_description_tb.get("1.0", "end"))-1.0))
+                recommended_movie_description_tb.insert("1.0", f"{recommended_movie_descriptions[recommended_movie_index]}")
+                recommendation_counter.configure(text=f"{recommended_movie_number} out of {recommended_movie_count}")
                 
             def Load_Previous_Recommendation():
                 global recommended_movie_number
@@ -132,8 +152,9 @@ def Submit_Form():
                 
             def Load_Next_Recommendation():
                 global recommended_movie_number
+                global recommended_movie_count
                 
-                if recommended_movie_number < 10:
+                if recommended_movie_number < recommended_movie_count:
                     recommended_movie_number += 1
                     Load_Recommendation()
                 
@@ -147,7 +168,6 @@ def Submit_Form():
             recommendation_window.columnconfigure(2, weight=1)
             recommendation_window.rowconfigure(0, weight=9)
             recommendation_window.rowconfigure(1, weight=1)
-            recommendation_window.resizable(0, 0)
                 
             # left arrow button
             left_arrow_img = tk.PhotoImage(master=recommendation_window, file="Images/Left Arrow.png")
@@ -187,8 +207,9 @@ def Submit_Form():
             recommended_movie_title_lbl = tk.Label(white_section,
                                                    text=recommended_movie_titles[0],
                                                    font=("Arial", 24, "bold"),
-                                                   bg='white')
-            recommended_movie_title_lbl.grid(row=0, column=0, columnspan=2, sticky=(tk.W))
+                                                   bg='white',
+                                                   wraplength=300)
+            recommended_movie_title_lbl.grid(row=0, column=0, columnspan=2, sticky=(tk.W), pady=10)
 
             # movie genre
             recommended_movie_genre_lbl = tk.Label(white_section,
@@ -265,7 +286,7 @@ def Submit_Form():
 
             # recommended movie counter label.
             recommendation_counter = tk.Label(recommendation_mid_section,
-                                              text=str(recommended_movie_number) + " out of 10",
+                                              text=f"{recommended_movie_number} out of {recommended_movie_count}",
                                               font=("Arial", 8, "bold"),
                                               bg='lightblue')
             recommendation_counter.grid(row=1, column=0, sticky=(tk.S))
