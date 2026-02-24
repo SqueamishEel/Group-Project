@@ -1,6 +1,7 @@
 #Import Components
 import pandas as pd
 import numpy as np
+import random
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -50,6 +51,21 @@ tfidf_matrix = tfidf.fit_transform(MovieDataset['Joined'])
 cosine_sim = cosine_similarity(tfidf_matrix, tfidf_matrix)
 
 
+def recommend_by_genre(genre):
+    
+    genre = genre.lower()
+    
+    filtered_movies = MovieDataset[
+        MovieDataset['genres'].str.lower().str.contains(genre, na=False)
+        ]
+    
+    if filtered_movies.empty:
+        return "No Movies Found For This Genre. Please Try Again."
+    
+    recommend_movie = filtered_movies.sample(1)
+    
+    return recommend_movie['original_title'].values[0]
+
 #Movie Reccomendation Method
 def recommend(movie_title, cosine_sim=cosine_sim):
     
@@ -68,8 +84,10 @@ def recommend(movie_title, cosine_sim=cosine_sim):
     return MovieDataset['original_title'].iloc[movie_indices]
 
 
-
 print(recommend("Robin Hood"))
+
+user_genre = input("Enter a Genre: ")
+print("Recommended Movie: ", recommend_by_genre(user_genre))
 
 #Output Datasets
 FullDataset
