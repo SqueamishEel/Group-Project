@@ -6,8 +6,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 #Read dataset Fils
-FullDataset = pd.read_csv("C:/Users/sahil/OneDrive/PP2/movies.csv")
-MovieDataset = pd.read_csv("C:/Users/sahil/OneDrive/PP2/movies.csv")
+FullDataset = pd.read_csv("C:/Users/26159295/OneDrive - Edge Hill University/PPractice2/movies.csv")
+MovieDataset = pd.read_csv("C:/Users/26159295/OneDrive - Edge Hill University/PPractice2/movies.csv")
 
 #Remove unecessary columns
 MovieDataset.pop("index")
@@ -50,7 +50,7 @@ tfidf_matrix = tfidf.fit_transform(MovieDataset['Joined'])
 #Calculates Cosine Similarity, 0-90 degrees
 cosine_sim = cosine_similarity(tfidf_matrix, tfidf_matrix)
 
-
+#Method to giverandom movie recommendation based on genre
 def recommend_by_genre(genre):
     
     genre = genre.lower()
@@ -61,6 +61,22 @@ def recommend_by_genre(genre):
     
     if filtered_movies.empty:
         return "No Movies Found For This Genre. Please Try Again."
+    
+    recommend_movie = filtered_movies.sample(1)
+    
+    return recommend_movie['original_title'].values[0]
+
+
+def recommend_by_director(director):
+    
+    director = director.lower()
+    
+    filtered_movies = MovieDataset[
+        MovieDataset['director'].str.lower().str.contains(director, na=False)
+        ]
+    
+    if filtered_movies.empty:
+        return "No Movies Found From This Director. Please Try Again."
     
     recommend_movie = filtered_movies.sample(1)
     
@@ -84,10 +100,21 @@ def recommend(movie_title, cosine_sim=cosine_sim):
     return MovieDataset['original_title'].iloc[movie_indices]
 
 
-print(recommend("Robin Hood"))
+# print(recommend("Robin Hood"))
 
 user_genre = input("Enter a Genre: ")
-print("Recommended Movie: ", recommend_by_genre(user_genre))
+print("Recommended Movie 1: ", recommend_by_genre(user_genre))
+print("Recommended Movie 2: ", recommend_by_genre(user_genre))
+print("Recommended Movie 3: ", recommend_by_genre(user_genre))
+print("Recommended Movie 4: ", recommend_by_genre(user_genre))
+print("Recommended Movie 5: ", recommend_by_genre(user_genre))
+
+user_director = input("Enter a Director: ")
+print("Recommended Movie by Director 1: ", recommend_by_director(user_director))
+print("Recommended Movie by Director 2: ", recommend_by_director(user_director))
+print("Recommended Movie by Director 3: ", recommend_by_director(user_director))
+print("Recommended Movie by Director 4: ", recommend_by_director(user_director))
+print("Recommended Movie by Director 5: ", recommend_by_director(user_director))
 
 #Output Datasets
 FullDataset
