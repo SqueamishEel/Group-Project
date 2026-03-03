@@ -5,7 +5,7 @@ import random
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-#Read dataset Fils
+#Read dataset Files
 FullDataset = pd.read_csv("C:/Users/26159295/OneDrive - Edge Hill University/PPractice2/movies.csv")
 MovieDataset = pd.read_csv("C:/Users/26159295/OneDrive - Edge Hill University/PPractice2/movies.csv")
 
