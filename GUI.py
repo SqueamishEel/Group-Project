@@ -4,7 +4,7 @@ from tkinter import Label, messagebox
 window = tk.Tk()
 
 window.title("Movie recommendation system")
-window.geometry("500x500")
+window.geometry("500x550")
 window.configure(background="lightblue")
 
 # Page title
@@ -381,7 +381,7 @@ def Submit_Yes():
             
     # select button
     select_button = tk.Button(white_section,
-                                text="Select",
+                                text="Rate Movie",
                                 activebackground="darkgrey",
                                 activeforeground="white",
                                 anchor="center",
@@ -424,11 +424,39 @@ button = tk.Button(window,
                    highlightthickness=2,
                    justify="left",
                    overrelief="raised",
-                   padx=10,
+                   padx=5,
                    pady=5,
-                   width=15,
+                   width=20,
                    wraplength=100)
-button.pack(padx=20, pady=20)
+button.pack(padx=5, pady=5)
+
+def NotRated():
+    messagebox.showerror("Rating", "You have not rated any movies yet") 
+    
+# search button label
+button = tk.Button(window,
+                   text="Reccomeded",
+                   command=NotRated,
+                   activebackground="darkgrey",
+                   activeforeground="white",
+                   anchor="center",
+                   bd=3,
+                   bg="darkblue",
+                   cursor="hand2",
+                   fg="white",
+                   font=("Arial", 12, "bold"),
+                   height=1,
+                   highlightbackground="black",
+                   highlightcolor="green",
+                   highlightthickness=2,
+                   justify="left",
+                   overrelief="raised",
+                   padx=5,
+                   pady=5,
+                   width=20,
+                   wraplength=200)
+button.pack(padx=5, pady=5)
+
+   
 
 window.resizable(0, 0)
-window.mainloop()
