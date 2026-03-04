@@ -50,6 +50,10 @@ tfidf_matrix = tfidf.fit_transform(MovieDataset['Joined'])
 #Calculates Cosine Similarity, 0-90 degrees
 cosine_sim = cosine_similarity(tfidf_matrix, tfidf_matrix)
 
+
+
+
+
 #Method to giverandom movie recommendation based on genre
 def recommend_by_genre(genre):
     
@@ -81,6 +85,33 @@ def recommend_by_director(director):
     recommend_movie = filtered_movies.sample(1)
     
     return recommend_movie['original_title'].values[0]
+
+
+def recommend_by_movie_title(title):
+    
+    title = title.lower()
+    
+    selected_movie = MovieDataset[
+        MovieDataset['original_title'].str.lower() == title
+                                  ]
+    if selected_movie.empty:
+        return "No Movies found Similar to this Movie, Please check Spelling."
+    
+    selected_genre = selected_movie['genres'].values[0]
+    
+    filtered_movies = MovieDataset[
+        (MovieDataset['genres'] == selected_genre) &
+        (MovieDataset['original_title'].str.lower() !=title)
+        ]
+    
+    if filtered_movies.empty:
+        return "No similar Movies found."
+    
+    return filtered_movies['original_title'].sample(5)
+    
+
+
+
 
 #Movie Reccomendation Method
 def recommend(movie_title, cosine_sim=cosine_sim):
@@ -115,6 +146,11 @@ print("Recommended Movie by Director 2: ", recommend_by_director(user_director))
 print("Recommended Movie by Director 3: ", recommend_by_director(user_director))
 print("Recommended Movie by Director 4: ", recommend_by_director(user_director))
 print("Recommended Movie by Director 5: ", recommend_by_director(user_director))
+
+user_movie = input("Enter a Movie: ")
+print("Recommended Similar Movies: ", recommend_by_movie_title(user_movie))
+
+
 
 #Output Datasets
 FullDataset
