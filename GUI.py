@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import Label, messagebox
-from easygui import *
 
 window = tk.Tk()
 
