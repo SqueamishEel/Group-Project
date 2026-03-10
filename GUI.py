@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import Label, messagebox
-from Movierecommendations import top_filtered_movies, apply_filters, recommend_from_history, get_history
+from MovieRecommendations import top_filtered_movies, apply_filters, recommend_from_history, get_history
 from Rating import Open_Recommendation_Window
 
 window = tk.Tk()
