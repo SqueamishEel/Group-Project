@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import Label, messagebox
-from Movierecommendations import save_rating, year_only
+from MovieRecommendations import save_rating, year_only
 
 
 def Rating_Popup(parent, movie_row, user_id):
@@ -299,3 +299,4 @@ def Open_Recommendation_Window(parent, user_id, recs_df):
 
     recommendation_window.resizable(0, 0)
     Load_Recommendation()
+
