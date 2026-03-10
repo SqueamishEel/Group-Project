@@ -1,19 +1,19 @@
-#Import Components
+import os
 import pandas as pd
 import numpy as np
-import random
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-#Read dataset Files
-FullDataset = pd.read_csv("C:/Users/26159295/OneDrive - Edge Hill University/PPractice2/movies.csv")
-MovieDataset = pd.read_csv("C:/Users/26159295/OneDrive - Edge Hill University/PPractice2/movies.csv")
+# Read dataset Files
+FullDataset = pd.read_csv(r"C:/Users/fitz_/Downloads/movies.csv")
+MovieDataset = pd.read_csv(r"C:/Users/fitz_/Downloads/movies.csv")
 
-#Remove unecessary columns
+USER_HISTORY = "user_ratings.csv"
+
+# Remove unnecessary columns
 MovieDataset.pop("index")
 MovieDataset.pop("budget")
 MovieDataset.pop("homepage")
-MovieDataset.pop("id")
 MovieDataset.pop("keywords")
 MovieDataset.pop("spoken_languages")
 MovieDataset.pop("popularity")
@@ -27,131 +27,141 @@ MovieDataset.pop("vote_count")
 MovieDataset.pop("cast")
 MovieDataset.pop("crew")
 
-
-#Removing Missing Values from dataset
-MovieDataset['runtime'] = MovieDataset['runtime'].replace(0, np.nan)
-MovieDataset['runtime'].fillna(MovieDataset['runtime'].median(), inplace = True)
-
-MovieDataset['Joined'] = (
-    MovieDataset['genres'].fillna('') + ' ' +
-    MovieDataset['original_language'].fillna('') + ' ' +
-    MovieDataset['original_title'].fillna('') + ' ' +
-    MovieDataset['release_date'].fillna('') + ' ' +
-    MovieDataset['director'].fillna('')
+# Removing Missing Values from dataset
+MovieDataset["runtime"] = MovieDataset["runtime"].replace(0, np.nan)
+MovieDataset["runtime"] = MovieDataset["runtime"].fillna(
+    MovieDataset["runtime"].median()
 )
-MovieDataset['Joined'] = MovieDataset['Joined'].str.lower()
 
-#Converting Text to Numerical vectors via TFIDF
-tfidf = TfidfVectorizer(stop_words = 'english')
+MovieDataset["genres"] = MovieDataset["genres"].fillna("").astype(str)
+MovieDataset["original_language"] = MovieDataset["original_language"].fillna("").astype(str)
+MovieDataset["original_title"] = MovieDataset["original_title"].fillna("").astype(str)
+MovieDataset["release_date"] = MovieDataset["release_date"].fillna("").astype(str)
+MovieDataset["director"] = MovieDataset["director"].fillna("").astype(str)
+MovieDataset["overview"] = MovieDataset["overview"].fillna("").astype(str)
 
-tfidf_matrix = tfidf.fit_transform(MovieDataset['Joined'])
+MovieDataset["Joined"] = (
+        MovieDataset["genres"] + " " +
+        MovieDataset["original_language"] + " " +
+        MovieDataset["original_title"] + " " +
+        MovieDataset["release_date"] + " " +
+        MovieDataset["director"] + " " +
+        MovieDataset["overview"]
+)
+MovieDataset["Joined"] = MovieDataset["Joined"].str.lower()
 
+# Converting Text to Numerical vectors via TFIDF
+tfidf = TfidfVectorizer(stop_words="english")
+tfidf_matrix = tfidf.fit_transform(MovieDataset["Joined"])
 
-#Calculates Cosine Similarity, 0-90 degrees
+# Calculates Cosine Similarity
 cosine_sim = cosine_similarity(tfidf_matrix, tfidf_matrix)
 
+# Lookups
+indices = pd.Series(MovieDataset.index, index=MovieDataset["original_title"]).drop_duplicates()
+id_to_idx = pd.Series(MovieDataset.index, index=MovieDataset["id"]).drop_duplicates()
 
 
-
-
-#Method to giverandom movie recommendation based on genre
-def recommend_by_genre(genre):
-    
-    genre = genre.lower()
-    
-    filtered_movies = MovieDataset[
-        MovieDataset['genres'].str.lower().str.contains(genre, na=False)
-        ]
-    
-    if filtered_movies.empty:
-        return "No Movies Found For This Genre. Please Try Again."
-    
-    recommend_movie = filtered_movies.sample(1)
-    
-    return recommend_movie['original_title'].values[0]
-
-
-def recommend_by_director(director):
-    
-    director = director.lower()
-    
-    filtered_movies = MovieDataset[
-        MovieDataset['director'].str.lower().str.contains(director, na=False)
-        ]
-    
-    if filtered_movies.empty:
-        return "No Movies Found From This Director. Please Try Again."
-    
-    recommend_movie = filtered_movies.sample(1)
-    
-    return recommend_movie['original_title'].values[0]
-
-
-def recommend_by_movie_title(title):
-    
-    title = title.lower()
-    
-    selected_movie = MovieDataset[
-        MovieDataset['original_title'].str.lower() == title
-                                  ]
-    if selected_movie.empty:
-        return "No Movies found Similar to this Movie, Please check Spelling."
-    
-    selected_genre = selected_movie['genres'].values[0]
-    
-    filtered_movies = MovieDataset[
-        (MovieDataset['genres'] == selected_genre) &
-        (MovieDataset['original_title'].str.lower() !=title)
-        ]
-    
-    if filtered_movies.empty:
-        return "No similar Movies found."
-    
-    return filtered_movies['original_title'].sample(5)
-    
-
-
-
-
-#Movie Reccomendation Method
+# Movie Recommendation Method
 def recommend(movie_title, cosine_sim=cosine_sim):
-    
-    indices = pd.Series(MovieDataset.index, index=MovieDataset['original_title'])
-    
     idx = indices[movie_title]
-    
+
     sim_scores = list(enumerate(cosine_sim[idx]))
-    
     sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
-    
     sim_scores = sim_scores[1:6]
-    
+
     movie_indices = [i[0] for i in sim_scores]
-    
-    return MovieDataset['original_title'].iloc[movie_indices]
+
+    return MovieDataset.iloc[movie_indices]
 
 
-# print(recommend("Robin Hood"))
-
-user_genre = input("Enter a Genre: ")
-print("Recommended Movie 1: ", recommend_by_genre(user_genre))
-print("Recommended Movie 2: ", recommend_by_genre(user_genre))
-print("Recommended Movie 3: ", recommend_by_genre(user_genre))
-print("Recommended Movie 4: ", recommend_by_genre(user_genre))
-print("Recommended Movie 5: ", recommend_by_genre(user_genre))
-
-user_director = input("Enter a Director: ")
-print("Recommended Movie by Director 1: ", recommend_by_director(user_director))
-print("Recommended Movie by Director 2: ", recommend_by_director(user_director))
-print("Recommended Movie by Director 3: ", recommend_by_director(user_director))
-print("Recommended Movie by Director 4: ", recommend_by_director(user_director))
-print("Recommended Movie by Director 5: ", recommend_by_director(user_director))
-
-user_movie = input("Enter a Movie: ")
-print("Recommended Similar Movies: ", recommend_by_movie_title(user_movie))
+def year_only(text):
+    return text[:4] if isinstance(text, str) and len(text) >= 4 else ""
 
 
+def apply_filters(genre, director="", year="", language=""):
+    FilteredDataset = MovieDataset.copy()
 
-#Output Datasets
-FullDataset
-MovieDataset
+    genre = genre.strip()
+    if genre:
+        parts = [p.strip() for p in genre.replace(",", " ").split() if p.strip()]
+        for p in parts:
+            FilteredDataset = FilteredDataset[
+                FilteredDataset["genres"].str.contains(p, case=False, na=False, regex=False)
+            ]
+
+    if director.strip():
+        FilteredDataset = FilteredDataset[
+            FilteredDataset["director"].str.contains(director.strip(), case=False, na=False, regex=False)
+        ]
+
+    if year.strip():
+        FilteredDataset = FilteredDataset[
+            FilteredDataset["release_date"].str.contains(year.strip(), case=False, na=False, regex=False)
+        ]
+
+    if language.strip():
+        FilteredDataset = FilteredDataset[
+            FilteredDataset["original_language"].str.contains(language.strip(), case=False, na=False, regex=False)
+        ]
+
+    return FilteredDataset
+
+
+def top_filtered_movies(genre, director="", year="", language="", n=20):
+    FilteredDataset = apply_filters(genre, director, year, language)
+    return FilteredDataset.sort_values("vote_average", ascending=False).head(n).reset_index(drop=True)
+
+
+def get_history(user_id):
+    if not os.path.exists(USER_HISTORY):
+        return pd.DataFrame(columns=["user_id", "movie_id", "rating"])
+
+    HistoryDataset = pd.read_csv(USER_HISTORY)
+    return HistoryDataset[HistoryDataset["user_id"] == user_id].copy()
+
+
+def save_rating(user_id, movie_id, rating):
+    NewRow = pd.DataFrame([{
+        "user_id": user_id,
+        "movie_id": int(movie_id),
+        "rating": int(rating)
+    }])
+
+    if os.path.exists(USER_HISTORY):
+        HistoryDataset = pd.read_csv(USER_HISTORY)
+        HistoryDataset = HistoryDataset[
+            ~((HistoryDataset["user_id"] == user_id) &
+              (HistoryDataset["movie_id"] == int(movie_id)))
+        ]
+        HistoryDataset = pd.concat([HistoryDataset, NewRow], ignore_index=True)
+    else:
+        HistoryDataset = NewRow
+
+    HistoryDataset.to_csv(USER_HISTORY, index=False)
+
+
+def recommend_from_history(user_id, filtered_df, n=20, min_rating=4):
+    HistoryDataset = get_history(user_id)
+    liked = HistoryDataset[HistoryDataset["rating"] >= min_rating]
+
+    if liked.empty:
+        raise ValueError("Rate some movies 4 or 5 first.")
+
+    seed_indices = [int(id_to_idx[mid]) for mid in liked["movie_id"].tolist() if mid in id_to_idx.index]
+
+    if not seed_indices:
+        raise ValueError("Rated movies not found.")
+
+    scores = cosine_sim[seed_indices].sum(axis=0)
+
+    rated_ids = set(HistoryDataset["movie_id"].tolist())
+    CandidateDataset = filtered_df[~filtered_df["id"].isin(rated_ids)]
+
+    if CandidateDataset.empty:
+        raise ValueError("No movies left after removing rated ones.")
+
+    ranked = sorted(CandidateDataset.index.tolist(), key=lambda i: scores[i], reverse=True)[:n]
+    return MovieDataset.loc[ranked].reset_index(drop=True)
+
+
