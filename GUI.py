@@ -1,11 +1,11 @@
 import tkinter as tk
-from tkinter import Label, messagebox
-from MovieRecommendations import top_filtered_movies, apply_filters, recommend_from_history, get_history
+from tkinter import Label, messagebox, Listbox
+from Movierecommendations import top_filtered_movies, apply_filters, recommend_from_history, get_history
 from Rating import Open_Recommendation_Window
 
 window = tk.Tk()
 window.title("Movie recommendation system")
-window.geometry("500x600")
+window.geometry("500x650")
 window.configure(background="lightblue")
 window.resizable(0, 0)
 
@@ -63,14 +63,27 @@ year_entry = tk.Entry(window, textvariable=year_var, font=("Arial", 10, "normal"
 year_label.pack(pady=10, padx=10, anchor="w")
 year_entry.pack(pady=1, padx=10, anchor="w")
 
-language_var = tk.StringVar()
-language_label = tk.Label(window, text="Language",
-                          font=("Arial", 16, "bold"),
-                          bg="lightblue",
-                          fg="black")
-language_entry = tk.Entry(window, textvariable=language_var, font=("Arial", 10, "normal"))
+
+language_label= tk.Label(window, text="Language",
+font =( "Arial", 16, "bold"),
+bg ="lightblue",
+fg="black", )
 language_label.pack(pady=10, padx=10, anchor="w")
-language_entry.pack(pady=1, padx=10, anchor="w")
+language_listbox= tk.Listbox(window,height=5, exportselection=False)
+
+languages= ["AF","AR","CN","CS","DA","DE","EL","EN",
+"ZH","XX","VI","TR","TH","TE","TA","SV","SL",
+"RU","RO","PT","PS","PL","NO","NL"
+,"NB","KY","KO","JA","IT","IS","ID",
+"HU","HI","HE","FR","FA","ES"
+
+]
+for lang in languages:
+    language_listbox.insert(tk.END, lang)
+    language_listbox.pack(pady=1, padx=10, anchor="w")
+
+
+
 
 label_required = Label(window, text="* Indicates a required field",
                        anchor="w",
@@ -191,13 +204,18 @@ def Submit_Form(mode="search"):
     genre = genre_var.get().strip()
     director = name_var.get().strip()
     year = year_var.get().strip()
-    language = language_var.get().strip()
+    
+    selection = language_listbox.curselection()
+    if selection:
+        language = language_listbox.get(selection[0])
+    else:
+        language = ""
 
-    if not user_id:
+    if  not user_id:
         messagebox.showerror("Missing", "User ID cannot be empty.")
         return
 
-    if not genre:
+    if mode == "search" and not genre:
         messagebox.showerror("The genre is empty", "The genre cannot be empty")
         return
 
