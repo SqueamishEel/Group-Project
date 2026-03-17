@@ -5,7 +5,7 @@ from Rating import Open_Recommendation_Window
 
 window = tk.Tk()
 window.title("Movie recommendation system")
-window.geometry("500x650")
+window.geometry("500x675")
 window.configure(background="lightblue")
 window.resizable(0, 0)
 
@@ -28,7 +28,7 @@ titlelabel = tk.Label(
 titlelabel.pack(pady=20)
 
 user_var = tk.StringVar(value="UserA")
-Label(window, text="User ID",
+Label(window, text="User ID *",
       anchor="w",
       font=("Arial", 16, "bold"),
       bg="lightblue",
@@ -63,7 +63,6 @@ year_entry = tk.Entry(window, textvariable=year_var, font=("Arial", 10, "normal"
 year_label.pack(pady=10, padx=10, anchor="w")
 year_entry.pack(pady=1, padx=10, anchor="w")
 
-
 language_label= tk.Label(window, text="Language",
 font =( "Arial", 16, "bold"),
 bg ="lightblue",
@@ -75,15 +74,10 @@ languages= ["AF","AR","CN","CS","DA","DE","EL","EN",
 "ZH","XX","VI","TR","TH","TE","TA","SV","SL",
 "RU","RO","PT","PS","PL","NO","NL"
 ,"NB","KY","KO","JA","IT","IS","ID",
-"HU","HI","HE","FR","FA","ES"
-
-]
+"HU","HI","HE","FR","FA","ES"]
 for lang in languages:
     language_listbox.insert(tk.END, lang)
     language_listbox.pack(pady=1, padx=10, anchor="w")
-
-
-
 
 label_required = Label(window, text="* Indicates a required field",
                        anchor="w",
@@ -243,7 +237,7 @@ def Submit_Form(mode="search"):
 
 button = tk.Button(
     window,
-    text="Search",
+    text="Search Movies",
     command=lambda: Submit_Form("search"),
     activebackground="darkgrey",
     activeforeground="white",
@@ -261,23 +255,23 @@ button = tk.Button(
     overrelief="raised",
     padx=5,
     pady=5,
-    width=20,
-    wraplength=100
+    width=28,
+    wraplength=200
 )
 button.pack(padx=5, pady=5)
 
 button2 = tk.Button(
     window,
-    text="Recommend Similar (from ratings)",
+    text="Recommend Similar\n     (From Ratings)",
     command=lambda: Submit_Form("similar"),
     activebackground="darkgrey",
     activeforeground="white",
     anchor="center",
     bd=3,
-    bg="darkgreen",
+    bg="darkblue",
     cursor="hand2",
     fg="white",
-    font=("Arial", 10, "bold"),
+    font=("Arial", 12, "bold"),
     height=1,
     highlightbackground="black",
     highlightcolor="green",
