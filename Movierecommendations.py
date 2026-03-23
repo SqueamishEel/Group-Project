@@ -4,7 +4,7 @@ import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-# Read dataset Files
+# Load the movie dataset
 FullDataset = pd.read_csv(r"C:/Users/fitz_/Downloads/movies.csv")
 MovieDataset = pd.read_csv(r"C:/Users/fitz_/Downloads/movies.csv")
 
@@ -27,7 +27,7 @@ MovieDataset.pop("vote_count")
 MovieDataset.pop("cast")
 MovieDataset.pop("crew")
 
-# Removing Missing Values from dataset
+# Clean missing values in the dataset
 MovieDataset["runtime"] = MovieDataset["runtime"].replace(0, np.nan)
 MovieDataset["runtime"] = MovieDataset["runtime"].fillna(
     MovieDataset["runtime"].median()
@@ -40,6 +40,7 @@ MovieDataset["release_date"] = MovieDataset["release_date"].fillna("").astype(st
 MovieDataset["director"] = MovieDataset["director"].fillna("").astype(str)
 MovieDataset["overview"] = MovieDataset["overview"].fillna("").astype(str)
 
+# Combine useful movie features into one text column
 MovieDataset["Joined"] = (
         MovieDataset["genres"] + " " +
         MovieDataset["original_language"] + " " +
@@ -50,19 +51,18 @@ MovieDataset["Joined"] = (
 )
 MovieDataset["Joined"] = MovieDataset["Joined"].str.lower()
 
-# Converting Text to Numerical vectors via TFIDF
+# Convert movie text into TF-IDF vectors
 tfidf = TfidfVectorizer(stop_words="english")
 tfidf_matrix = tfidf.fit_transform(MovieDataset["Joined"])
 
-# Calculates Cosine Similarity
+# Calculate cosine similarity between movies
 cosine_sim = cosine_similarity(tfidf_matrix, tfidf_matrix)
 
-# Lookups
+# Create lookup tables for titles and movie IDs
 indices = pd.Series(MovieDataset.index, index=MovieDataset["original_title"]).drop_duplicates()
 id_to_idx = pd.Series(MovieDataset.index, index=MovieDataset["id"]).drop_duplicates()
 
-
-# Movie Recommendation Method
+# Recommend movies similar to a selected title
 def recommend(movie_title, cosine_sim=cosine_sim):
     idx = indices[movie_title]
 
@@ -74,11 +74,10 @@ def recommend(movie_title, cosine_sim=cosine_sim):
 
     return MovieDataset.iloc[movie_indices]
 
-
 def year_only(text):
     return text[:4] if isinstance(text, str) and len(text) >= 4 else ""
 
-
+# Filter movies using genre, director, year and language
 def apply_filters(genre, director="", year="", language=""):
     FilteredDataset = MovieDataset.copy()
 
@@ -107,12 +106,12 @@ def apply_filters(genre, director="", year="", language=""):
 
     return FilteredDataset
 
-
+# Return the top filtered movies sorted by vote average
 def top_filtered_movies(genre, director="", year="", language="", n=20):
     FilteredDataset = apply_filters(genre, director, year, language)
     return FilteredDataset.sort_values("vote_average", ascending=False).head(n).reset_index(drop=True)
 
-
+# Load and return the user's rating history
 def get_history(user_id):
     if not os.path.exists(USER_HISTORY):
         return pd.DataFrame(columns=["user_id", "movie_id", "rating"])
@@ -120,7 +119,7 @@ def get_history(user_id):
     HistoryDataset = pd.read_csv(USER_HISTORY)
     return HistoryDataset[HistoryDataset["user_id"] == user_id].copy()
 
-
+# Save user ratings to the rating history file
 def save_rating(user_id, movie_id, rating):
     NewRow = pd.DataFrame([{
         "user_id": user_id,
@@ -140,7 +139,7 @@ def save_rating(user_id, movie_id, rating):
 
     HistoryDataset.to_csv(USER_HISTORY, index=False)
 
-
+# Recommend movies based on films the user has rated highly
 def recommend_from_history(user_id, filtered_df, n=20, min_rating=4):
     HistoryDataset = get_history(user_id)
     liked = HistoryDataset[HistoryDataset["rating"] >= min_rating]
@@ -163,5 +162,3 @@ def recommend_from_history(user_id, filtered_df, n=20, min_rating=4):
 
     ranked = sorted(CandidateDataset.index.tolist(), key=lambda i: scores[i], reverse=True)[:n]
     return MovieDataset.loc[ranked].reset_index(drop=True)
-
-
