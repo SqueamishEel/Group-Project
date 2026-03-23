@@ -1,13 +1,17 @@
 import tkinter as tk
 from tkinter import Label, messagebox, Listbox
-from MovieRecommendations import top_filtered_movies, apply_filters, recommend_from_history, get_history
+from Movierecommendations import top_filtered_movies, apply_filters, recommend_from_history, get_history
 from Rating import Open_Recommendation_Window
 
+# Main Gui window, the GUI can only run from this file
 window = tk.Tk()
 window.title("Movie recommendation system")
-window.geometry("500x675")
+window.geometry("500x650")
 window.configure(background="lightblue")
 window.resizable(0, 0)
+
+# below is the GUI'S title and its label boxes.
+# It's where you can start searching for specific movies.
 
 title_var = tk.StringVar()
 title_var.set("Find A Recommended Movie")
@@ -28,7 +32,7 @@ titlelabel = tk.Label(
 titlelabel.pack(pady=20)
 
 user_var = tk.StringVar(value="UserA")
-Label(window, text="User ID *",
+Label(window, text="User ID",
       anchor="w",
       font=("Arial", 16, "bold"),
       bg="lightblue",
@@ -63,6 +67,7 @@ year_entry = tk.Entry(window, textvariable=year_var, font=("Arial", 10, "normal"
 year_label.pack(pady=10, padx=10, anchor="w")
 year_entry.pack(pady=1, padx=10, anchor="w")
 
+# the languages of the films and its label
 language_label= tk.Label(window, text="Language",
 font =( "Arial", 16, "bold"),
 bg ="lightblue",
@@ -72,12 +77,14 @@ language_listbox= tk.Listbox(window,height=5, exportselection=False)
 
 languages_list= ["Afrikaans","Arabic","Chinese (Simplified)","Chinese (Traditional)","Czech","Danish","English","Farsi","French","German","Greek"
            ,"Hebrew","Hindi","Hungarian","Indonesian","Icelandic","Italian","Japanese","Korean","Kyrgyz","Norsk Bokmal","Netherlands"
-           ,"Norwegian","Polish","Pashto","Portuguese","Romainian","Russian","Slovenian","Spanish","Swedish","Tamil","Telugu","Thai"
+           ,"Norwegian","Polish","Pashto","Portuguese","Romanian","Russian","Slovenian","Spanish","Swedish","Tamil","Telugu","Thai"
            ,"Turkish","Vietnamese","No Spoken Language"]
-
 for lang in languages_list:
     language_listbox.insert(tk.END, lang)
     language_listbox.pack(pady=1, padx=10, anchor="w")
+
+
+
 
 label_required = Label(window, text="* Indicates a required field",
                        anchor="w",
@@ -86,14 +93,14 @@ label_required = Label(window, text="* Indicates a required field",
                        fg="black")
 label_required.pack(pady=5, padx=5, anchor="w")
 
-
-def Open_Confirm_Popup(user_id, genre, director, year, chosen_language, mode):
+## conformation window
+def Open_Confirm_Popup(user_id, genre, director, year, language, mode):
     popup = tk.Toplevel(window)
     popup.title("Confirm")
     popup.geometry("300x300")
     popup.configure(background="lightblue")
     popup.resizable(0, 0)
-
+    # shows what the user searched
     Label(popup, text="Is this correct?",
           anchor="w",
           font=("Arial", 12, "bold"),
@@ -118,44 +125,12 @@ def Open_Confirm_Popup(user_id, genre, director, year, chosen_language, mode):
           bg="lightblue",
           fg="black").pack(pady=5, padx=5, anchor="n")
 
-    Label(popup, text="Language: " + chosen_language,
+    Label(popup, text="Language: " + language,
           anchor="n",
           font=("Arial", 10, "bold"),
           bg="lightblue",
           fg="black").pack(pady=5, padx=5, anchor="n")
-    
-    if chosen_language == "Chinese (Simplified)":
-        language = "CN"
-    elif chosen_language == "Chinese (Traditional)":
-        language = "ZH"
-    elif chosen_language == "Czech":
-        language = "CS"
-    elif chosen_language == "German":
-        language = "DE"
-    elif chosen_language == "Greek":
-        language = "EL"
-    elif chosen_language == "Spanish":
-        language = "ES"
-    elif chosen_language == "Icelandic":
-        language = "IS"
-    elif chosen_language == "Norsk Bokmal":
-        language = "NB"
-    elif chosen_language == "Polish":
-        language = "PL"
-    elif chosen_language == "Pashto":
-        language = "PS"
-    elif chosen_language == "Portuguese":
-        language = "PT"
-    elif chosen_language == "Swedish":
-        language = "SV"
-    elif chosen_language == "Turkish":
-        language = "TR"
-    elif chosen_language == "No Spoken Language":
-        language = "XX"
-    else:
-        chosen_language = chosen_language.upper()
-        language = chosen_language[:2]
-
+    # will search if everything is met
     def Submit_Yes():
         popup.destroy()
 
@@ -170,7 +145,7 @@ def Open_Confirm_Popup(user_id, genre, director, year, chosen_language, mode):
                 return
 
         Open_Recommendation_Window(window, user_id, recs)
-
+    ## windows goes if no is pressed
     def Submit_No():
         popup.destroy()
 
@@ -205,17 +180,17 @@ def Open_Confirm_Popup(user_id, genre, director, year, chosen_language, mode):
         command=Submit_No,
         activebackground="darkgrey",
         activeforeground="white",
-        anchor="center",
+        anchor="w",
         bd=3,
         bg="darkblue",
         cursor="hand2",
         fg="white",
         font=("Arial", 12, "bold"),
-        height=1,
+        height=3,
         highlightbackground="black",
         highlightcolor="green",
         highlightthickness=1,
-        justify="left",
+        justify="right",
         overrelief="raised",
         padx=5,
         pady=5,
@@ -224,13 +199,13 @@ def Open_Confirm_Popup(user_id, genre, director, year, chosen_language, mode):
     )
     no_button.pack(pady=5, padx=5, anchor="n")
 
-
+# Handles form submission, validates inputs and decides whether to search or recommend similar movies
 def Submit_Form(mode="search"):
     user_id = user_var.get().strip()
     genre = genre_var.get().strip()
     director = name_var.get().strip()
     year = year_var.get().strip()
-    
+
     selection = language_listbox.curselection()
     if selection:
         language = language_listbox.get(selection[0])
@@ -238,13 +213,13 @@ def Submit_Form(mode="search"):
         language = ""
 
     if  not user_id:
-        messagebox.showerror("No User ID entered", "User ID cannot be empty.")
+        messagebox.showerror("Missing", "User ID cannot be empty.")
         return
 
     if mode == "search" and not genre:
         messagebox.showerror("The genre is empty", "The genre cannot be empty")
         return
-
+    # looks at your ratings if higher than 4
     if mode == "similar":
         h = get_history(user_id)
         total_rated = len(h)
@@ -266,10 +241,10 @@ def Submit_Form(mode="search"):
 
     Open_Confirm_Popup(user_id, genre, director, year, language, mode)
 
-
+## the search and recommend button
 button = tk.Button(
     window,
-    text="Search Movies",
+    text="Search",
     command=lambda: Submit_Form("search"),
     activebackground="darkgrey",
     activeforeground="white",
@@ -287,23 +262,23 @@ button = tk.Button(
     overrelief="raised",
     padx=5,
     pady=5,
-    width=28,
-    wraplength=200
+    width=20,
+    wraplength=100
 )
 button.pack(padx=5, pady=5)
 
 button2 = tk.Button(
     window,
-    text="Recommend Similar\n     (From Ratings)",
+    text="Recommend Similar (from ratings)",
     command=lambda: Submit_Form("similar"),
     activebackground="darkgrey",
     activeforeground="white",
     anchor="center",
-    bd=3,
-    bg="darkblue",
+    bd=1,
+    bg="darkgreen",
     cursor="hand2",
     fg="white",
-    font=("Arial", 12, "bold"),
+    font=("Arial", 10, "bold"),
     height=1,
     highlightbackground="black",
     highlightcolor="green",
