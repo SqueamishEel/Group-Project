@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import Label, messagebox
-from MovieRecommendations import save_rating, year_only
+from Movierecommendations import save_rating, year_only
 
-
+# Rating gui pop up
 def Rating_Popup(parent, movie_row, user_id):
     popup = tk.Toplevel(parent)
     popup.title("Rate Movie")
@@ -22,6 +22,7 @@ def Rating_Popup(parent, movie_row, user_id):
     rating_value = {"v": 0}
     stars = []
 
+    # Helps so you can rate multiple films
     def Refresh_Stars():
         for i, b in enumerate(stars, start=1):
             b.config(text="★" if i <= rating_value["v"] else "☆")
@@ -47,7 +48,7 @@ def Rating_Popup(parent, movie_row, user_id):
         stars.append(b)
 
     Refresh_Stars()
-
+    # this is the submit function for rating
     def Submit_Rating():
         if rating_value["v"] == 0:
             messagebox.showerror("Missing rating", "Pick 1 to 5 stars.")
@@ -83,7 +84,7 @@ def Open_Recommendation_Window(parent, user_id, recs_df):
     global recommended_movie_count
     recommended_movie_number = 1
     recommended_movie_count = len(recs_df)
-
+   ## Shows the description of the film recommended
     def Load_Recommendation():
         global recommended_movie_number
         recommended_movie_index = recommended_movie_number - 1
@@ -130,7 +131,7 @@ def Open_Recommendation_Window(parent, user_id, recs_df):
     def Rate_Current_Movie():
         row = recs_df.iloc[recommended_movie_number - 1]
         Rating_Popup(recommendation_window, row, user_id)
-
+     ## recommendation GUI
     recommendation_window = tk.Toplevel(parent)
     recommendation_window.title("Movie recommendation system - Recommendations")
     recommendation_window.geometry("500x500")
@@ -140,7 +141,7 @@ def Open_Recommendation_Window(parent, user_id, recs_df):
     recommendation_window.columnconfigure(2, weight=1)
     recommendation_window.rowconfigure(0, weight=9)
     recommendation_window.rowconfigure(1, weight=1)
-
+    ## Arrows to change the movie
     left_arrow = tk.Button(
         recommendation_window,
         command=Load_Previous_Recommendation,
@@ -299,4 +300,3 @@ def Open_Recommendation_Window(parent, user_id, recs_df):
 
     recommendation_window.resizable(0, 0)
     Load_Recommendation()
-
