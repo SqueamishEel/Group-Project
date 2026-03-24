@@ -6,7 +6,7 @@ from Rating import Open_Recommendation_Window
 # Main Gui window, the GUI can only run from this file
 window = tk.Tk()
 window.title("Movie recommendation system")
-window.geometry("500x650")
+window.geometry("500x675")
 window.configure(background="lightblue")
 window.resizable(0, 0)
 
@@ -32,7 +32,7 @@ titlelabel = tk.Label(
 titlelabel.pack(pady=20)
 
 user_var = tk.StringVar(value="UserA")
-Label(window, text="User ID",
+Label(window, text="User ID *",
       anchor="w",
       font=("Arial", 16, "bold"),
       bg="lightblue",
@@ -82,10 +82,7 @@ languages_list= ["Afrikaans","Arabic","Chinese (Simplified)","Chinese (Tradition
 for lang in languages_list:
     language_listbox.insert(tk.END, lang)
     language_listbox.pack(pady=1, padx=10, anchor="w")
-
-
-
-
+    
 label_required = Label(window, text="* Indicates a required field",
                        anchor="w",
                        font=("Arial", 8, "bold"),
@@ -244,7 +241,7 @@ def Submit_Form(mode="search"):
 ## the search and recommend button
 button = tk.Button(
     window,
-    text="Search",
+    text="Search Movies",
     command=lambda: Submit_Form("search"),
     activebackground="darkgrey",
     activeforeground="white",
@@ -262,23 +259,23 @@ button = tk.Button(
     overrelief="raised",
     padx=5,
     pady=5,
-    width=20,
-    wraplength=100
+    width=28,
+    wraplength=200
 )
 button.pack(padx=5, pady=5)
 
-button2 = tk.Button(
+button2 = tk.Button(    
     window,
-    text="Recommend Similar (from ratings)",
+    text="Recommend Similar\n     (From Ratings)",
     command=lambda: Submit_Form("similar"),
     activebackground="darkgrey",
     activeforeground="white",
     anchor="center",
-    bd=1,
-    bg="darkgreen",
+    bd=3,
+    bg="darkblue",
     cursor="hand2",
     fg="white",
-    font=("Arial", 10, "bold"),
+    font=("Arial", 12, "bold"),
     height=1,
     highlightbackground="black",
     highlightcolor="green",
