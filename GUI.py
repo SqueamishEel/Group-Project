@@ -91,7 +91,7 @@ label_required = Label(window, text="* Indicates a required field",
 label_required.pack(pady=5, padx=5, anchor="w")
 
 ## conformation window
-def Open_Confirm_Popup(user_id, genre, director, year, language, mode):
+def Open_Confirm_Popup(user_id, genre, director, year, chosen_language, mode):
     popup = tk.Toplevel(window)
     popup.title("Confirm")
     popup.geometry("300x300")
@@ -122,11 +122,44 @@ def Open_Confirm_Popup(user_id, genre, director, year, language, mode):
           bg="lightblue",
           fg="black").pack(pady=5, padx=5, anchor="n")
 
-    Label(popup, text="Language: " + language,
+    Label(popup, text="Language: " + chosen_language,
           anchor="n",
           font=("Arial", 10, "bold"),
           bg="lightblue",
           fg="black").pack(pady=5, padx=5, anchor="n")
+    
+    if chosen_language == "Chinese (Simplified)":
+        language = "CN"
+    elif chosen_language == "Chinese (Traditional)":
+        language = "ZH"
+    elif chosen_language == "Czech":
+        language = "CS"
+    elif chosen_language == "German":
+        language = "DE"
+    elif chosen_language == "Greek":
+        language = "EL"
+    elif chosen_language == "Spanish":
+        language = "ES"
+    elif chosen_language == "Icelandic":
+        language = "IS"
+    elif chosen_language == "Norsk Bokmal":
+        language = "NB"
+    elif chosen_language == "Polish":
+        language = "PL"
+    elif chosen_language == "Pashto":
+        language = "PS"
+    elif chosen_language == "Portuguese":
+        language = "PT"
+    elif chosen_language == "Swedish":
+        language = "SV"
+    elif chosen_language == "Turkish":
+        language = "TR"
+    elif chosen_language == "No Spoken Language":
+        language = "XX"
+    else:
+        chosen_language = chosen_language.upper()
+        language = chosen_language[:2]
+
     # will search if everything is met
     def Submit_Yes():
         popup.destroy()
@@ -210,7 +243,7 @@ def Submit_Form(mode="search"):
         language = ""
 
     if  not user_id:
-        messagebox.showerror("Missing", "User ID cannot be empty.")
+        messagebox.showerror("No User ID entered", "User ID cannot be empty.")
         return
 
     if mode == "search" and not genre:
